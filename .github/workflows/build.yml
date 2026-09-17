@@ -29,8 +29,10 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
 
       - name: Publish release with raw APK
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: build-${{ github.run_number }}
-          name: Build ${{ github.run_number }}
-          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create build-${{ github.run_number }} \
+            build/app/outputs/flutter-apk/app-release.apk \
+            --title "Build ${{ github.run_number }}" \
+            --notes "Automated build"
